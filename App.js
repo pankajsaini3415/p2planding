@@ -103,7 +103,6 @@ export default function App() {
             </View>
           </View>
 
-          <Text style={[styles.title, isCompact && styles.titleCompact]}>Fast USDT Trades in a Clean, Secure Experience</Text>
           
           <View style={styles.statsRow}>
             {stats.map((item) => (
