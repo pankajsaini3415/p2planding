@@ -1,9 +1,9 @@
 import { StatusBar } from "expo-status-bar";
 import { Feather, MaterialCommunityIcons } from "@expo/vector-icons";
-import { Linking, Pressable, SafeAreaView, StyleSheet, Text, View, useWindowDimensions } from "react-native";
-import { useEffect, useMemo, useState } from "react";
+import { Linking, Pressable, SafeAreaView, ScrollView, StyleSheet, Text, View, useWindowDimensions } from "react-native";
+import { useMemo } from "react";
 
-const TELEGRAM_USERNAME = "your_telegram_username";
+const TELEGRAM_USERNAME = "Prongtoken";
 
 const COLORS = {
   bg: "#FFFFFF",
@@ -24,9 +24,9 @@ const stats = [
 ];
 
 const services = [
-  { title: "Buy USDT", rate: "From ₹83.50", icon: "trending-up" },
-  { title: "Sell USDT", rate: "At ₹83.20", icon: "repeat" },
-  { title: "Bulk Orders", rate: "Custom Rate", icon: "layers" },
+  { title: "Buy USDT", rate: "₹105.00", icon: "trending-up" },
+  { title: "Sell USDT", rate: "₹105.00", icon: "repeat" },
+  { title: "Bulk Orders", rate: "Best Custom Rate", icon: "layers" },
 ];
 
 const trustPoints = [
@@ -87,72 +87,77 @@ function ServiceCard({ title, rate, icon }) {
 
 export default function App() {
   const { width } = useWindowDimensions();
-  const [currentRate, setCurrentRate] = useState("83.45");
   const isCompact = width < 980;
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      const change = (Math.random() * 0.1 - 0.05).toFixed(2);
-      setCurrentRate((prev) => (parseFloat(prev) + parseFloat(change)).toFixed(2));
-    }, 5000);
-    return () => clearInterval(interval);
-  }, []);
+  const isMobile = width < 768;
+  const currentRate = "105.00";
 
   const year = useMemo(() => new Date().getFullYear(), []);
+
+  const content = (
+    <>
+      <View style={styles.container}>
+        <View style={[styles.heroPanel, isCompact && styles.heroPanelCompact]}>
+          <View style={[styles.brandRow, isMobile && styles.brandRowMobile]}>
+            <Text style={styles.brand}>USDT.P2P</Text>
+            <View style={styles.liveRatePill}>
+              <Feather name="activity" size={14} color={COLORS.success} />
+              <Text style={styles.liveRateLabel}>Fixed Rate</Text>
+              <Text style={styles.liveRateValue}>₹{currentRate}</Text>
+            </View>
+          </View>
+
+          <Text style={[styles.title, isCompact && styles.titleCompact]}>Fast USDT Trades in a Clean, Secure Experience</Text>
+          <Text style={[styles.subtitle, isCompact && styles.subtitleCompact]}>
+            White-theme premium landing screen focused on trust, speed, and frictionless conversion.
+          </Text>
+
+          <View style={styles.statsRow}>
+            {stats.map((item) => (
+              <StatCard key={item.label} {...item} />
+            ))}
+          </View>
+
+          <View style={styles.servicesRow}>
+            {services.map((item) => (
+              <ServiceCard key={item.title} {...item} />
+            ))}
+          </View>
+
+          <View style={styles.trustRow}>
+            {trustPoints.map((item) => (
+              <View key={item.title} style={styles.trustChip}>
+                <Feather name={item.icon} size={14} color={COLORS.primary} />
+                <Text style={styles.trustText}>{item.title}</Text>
+              </View>
+            ))}
+          </View>
+
+          <View style={[styles.footerRow, isMobile && styles.footerRowMobile]}>
+            <Text style={styles.footerText}>© {year} USDT.P2P • All rights reserved</Text>
+            <TelegramButton label="Chat on Telegram" onPress={() => openTelegram("Hi @Prongtoken, I want to start trading USDT at ₹105")}/>
+          </View>
+        </View>
+      </View>
+
+      <TelegramButton
+        floating
+        label={isMobile ? "Open Telegram Chat" : "Telegram Support"}
+        onPress={() => openTelegram("Hi @Prongtoken, I need assistance with USDT trading")}
+      />
+    </>
+  );
 
   return (
     <SafeAreaView style={styles.safe}>
       <StatusBar style="dark" />
       <View style={styles.root}>
-        <View style={styles.container}>
-          <View style={[styles.heroPanel, isCompact && styles.heroPanelCompact]}>
-            <View style={styles.brandRow}>
-              <Text style={styles.brand}>USDT.P2P</Text>
-              <View style={styles.liveRatePill}>
-                <Feather name="activity" size={14} color={COLORS.success} />
-                <Text style={styles.liveRateLabel}>Live</Text>
-                <Text style={styles.liveRateValue}>₹{currentRate}</Text>
-              </View>
-            </View>
-
-            <Text style={styles.title}>Fast USDT Trades in a Clean, Secure Experience</Text>
-            <Text style={styles.subtitle}>
-              White-theme premium landing screen focused on trust, speed, and frictionless conversion.
-            </Text>
-
-            <View style={styles.statsRow}>
-              {stats.map((item) => (
-                <StatCard key={item.label} {...item} />
-              ))}
-            </View>
-
-            <View style={styles.servicesRow}>
-              {services.map((item) => (
-                <ServiceCard key={item.title} {...item} />
-              ))}
-            </View>
-
-            <View style={styles.trustRow}>
-              {trustPoints.map((item) => (
-                <View key={item.title} style={styles.trustChip}>
-                  <Feather name={item.icon} size={14} color={COLORS.primary} />
-                  <Text style={styles.trustText}>{item.title}</Text>
-                </View>
-              ))}
-            </View>
-
-            <View style={styles.footerRow}>
-              <Text style={styles.footerText}>© {year} USDT.P2P • All rights reserved</Text>
-              <TelegramButton label="Message on Telegram" onPress={() => openTelegram("Hi, I want to start trading USDT")} />
-            </View>
-          </View>
-        </View>
-
-        <TelegramButton
-          floating
-          label="Telegram"
-          onPress={() => openTelegram("Hi, I need assistance with USDT trading")}
-        />
+        {isMobile ? (
+          <ScrollView contentContainerStyle={styles.mobileScrollContent} showsVerticalScrollIndicator={false}>
+            {content}
+          </ScrollView>
+        ) : (
+          content
+        )}
       </View>
     </SafeAreaView>
   );
@@ -165,7 +170,9 @@ const styles = StyleSheet.create({
   },
   root: {
     flex: 1,
-    overflow: "hidden",
+  },
+  mobileScrollContent: {
+    paddingBottom: 96,
   },
   container: {
     flex: 1,
@@ -193,6 +200,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginBottom: 14,
     gap: 12,
+  },
+  brandRowMobile: {
+    alignItems: "flex-start",
+    flexDirection: "column",
   },
   brand: {
     fontSize: 26,
@@ -227,6 +238,10 @@ const styles = StyleSheet.create({
     color: COLORS.text,
     maxWidth: 780,
   },
+  titleCompact: {
+    fontSize: 30,
+    lineHeight: 37,
+  },
   subtitle: {
     marginTop: 10,
     marginBottom: 18,
@@ -234,6 +249,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 24,
     maxWidth: 760,
+  },
+  subtitleCompact: {
+    fontSize: 15,
+    lineHeight: 22,
   },
   statsRow: {
     flexDirection: "row",
@@ -341,6 +360,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: 12,
   },
+  footerRowMobile: {
+    alignItems: "flex-start",
+    justifyContent: "flex-start",
+  },
   footerText: {
     color: COLORS.muted,
     fontSize: 12,
@@ -354,6 +377,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: 8,
+    minHeight: 44,
   },
   telegramButtonText: {
     color: "#FFFFFF",
@@ -362,13 +386,14 @@ const styles = StyleSheet.create({
   },
   telegramButtonFloating: {
     position: "absolute",
-    right: 18,
+    right: 14,
     bottom: 18,
     shadowColor: "#0F172A",
     shadowOffset: { width: 0, height: 8 },
     shadowOpacity: 0.2,
     shadowRadius: 16,
     elevation: 8,
+    maxWidth: "92%",
   },
   pressed: {
     transform: [{ scale: 0.98 }],
