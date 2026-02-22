@@ -1,17 +1,17 @@
-# P2P USDT Landing Page
+# P2P USDT Landing (React Native + Web)
 
-Premium, responsive landing page for a P2P USDT business with a strong conversion-focused design and Telegram-first call-to-action.
+Modern, conversion-focused landing page built with React Native using Expo.
+Runs on Android, iOS, and Web from the same codebase.
 
-## Files
+## Setup
 
-- `index.html` - Page structure and content
-- `styles.css` - Premium dark crypto theme and responsive UI
-- `script.js` - Telegram button link wiring and dynamic year
+1. Install dependencies:
 
-## Quick Setup
+```bash
+npm install
+```
 
-1. Open `script.js`
-2. Replace:
+2. Open `App.js` and replace:
 
 ```js
 const TELEGRAM_USERNAME = "your_telegram_username";
@@ -19,14 +19,27 @@ const TELEGRAM_USERNAME = "your_telegram_username";
 
 with your real Telegram username (without `@`).
 
-## Run Locally
+## Run
 
-Use any static server, for example:
+- Web:
 
 ```bash
-python3 -m http.server 8080
+npm run web
 ```
 
-Then open:
+- Android:
 
-`http://localhost:8080`
+```bash
+npm run android
+```
+
+- iOS:
+
+```bash
+npm run ios
+```
+
+## Notes
+
+- Existing static files (`index.html`, `styles.css`, `script.js`) are kept in the repository.
+- Main React Native app entry is `App.js`.
