@@ -1,6 +1,7 @@
 import { StatusBar } from "expo-status-bar";
 import { Feather, MaterialCommunityIcons } from "@expo/vector-icons";
-import { Linking, Pressable, SafeAreaView, StyleSheet, Text, View, useWindowDimensions } from "react-native";
+import { useEffect, useRef } from "react";
+import { Animated, Easing, Linking, Pressable, SafeAreaView, StyleSheet, Text, View, useWindowDimensions } from "react-native";
 
 const TELEGRAM_USERNAME = "Prongtoken";
 const USDT_RATE_INR = "105.00";
@@ -28,20 +29,94 @@ function openTelegram(message) {
 }
 
 export default function App() {
-  const { width } = useWindowDimensions();
+  const { width, height } = useWindowDimensions();
   const isMobile = width < 768;
+
+  const enterAnim = useRef(new Animated.Value(0)).current;
+  const pulseAnim = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    Animated.timing(enterAnim, {
+      toValue: 1,
+      duration: 700,
+      easing: Easing.out(Easing.cubic),
+      useNativeDriver: true,
+    }).start();
+
+    const loop = Animated.loop(
+      Animated.sequence([
+        Animated.timing(pulseAnim, {
+          toValue: 1,
+          duration: 1200,
+          easing: Easing.inOut(Easing.ease),
+          useNativeDriver: true,
+        }),
+        Animated.timing(pulseAnim, {
+          toValue: 0,
+          duration: 1200,
+          easing: Easing.inOut(Easing.ease),
+          useNativeDriver: true,
+        }),
+      ])
+    );
+
+    loop.start();
+    return () => loop.stop();
+  }, [enterAnim, pulseAnim]);
+
+  const cardMinHeight = Math.round(Math.max(height * (isMobile ? 0.76 : 0.78), isMobile ? 520 : 620));
+
+  const cardAnimatedStyle = {
+    opacity: enterAnim,
+    transform: [
+      {
+        translateY: enterAnim.interpolate({
+          inputRange: [0, 1],
+          outputRange: [26, 0],
+        }),
+      },
+      {
+        scale: enterAnim.interpolate({
+          inputRange: [0, 1],
+          outputRange: [0.985, 1],
+        }),
+      },
+    ],
+  };
+
+  const ratePillAnimatedStyle = {
+    transform: [
+      {
+        scale: pulseAnim.interpolate({
+          inputRange: [0, 1],
+          outputRange: [1, 1.03],
+        }),
+      },
+    ],
+  };
+
+  const ctaAnimatedStyle = {
+    transform: [
+      {
+        translateY: pulseAnim.interpolate({
+          inputRange: [0, 1],
+          outputRange: [0, -2],
+        }),
+      },
+    ],
+  };
 
   return (
     <SafeAreaView style={styles.safe}>
       <StatusBar style="dark" />
       <View style={styles.root}>
-        <View style={[styles.card, isMobile && styles.cardMobile]}>
+        <Animated.View style={[styles.card, isMobile && styles.cardMobile, { minHeight: cardMinHeight }, cardAnimatedStyle]}>
           <View style={[styles.topRow, isMobile && styles.topRowMobile]}>
             <Text style={styles.brand}>USDT.P2P</Text>
-            <View style={styles.ratePill}>
+            <Animated.View style={[styles.ratePill, ratePillAnimatedStyle]}>
               <Feather name="activity" size={14} color={COLORS.success} />
               <Text style={styles.rateText}>USDT ₹{USDT_RATE_INR}</Text>
-            </View>
+            </Animated.View>
           </View>
 
           <Text style={[styles.title, isMobile && styles.titleMobile]}>Trade USDT Fast & Secure</Text>
@@ -56,16 +131,18 @@ export default function App() {
             ))}
           </View>
 
-          <Pressable
-            onPress={() => openTelegram("Hi @Prongtoken, I want to buy/sell USDT at ₹105")}
-            style={({ pressed }) => [styles.telegramButton, pressed && styles.pressed]}
-          >
-            <MaterialCommunityIcons name="telegram" size={20} color="#FFFFFF" />
-            <Text style={styles.telegramText}>Chat on Telegram</Text>
-          </Pressable>
+          <Animated.View style={ctaAnimatedStyle}>
+            <Pressable
+              onPress={() => openTelegram("Hi @Prongtoken, I want to buy/sell USDT at ₹105")}
+              style={({ pressed }) => [styles.telegramButton, pressed && styles.pressed]}
+            >
+              <MaterialCommunityIcons name="telegram" size={20} color="#FFFFFF" />
+              <Text style={styles.telegramText}>Chat on Telegram</Text>
+            </Pressable>
+          </Animated.View>
 
           <Text style={styles.footer}>Instant support • Verified deals • White theme premium UX</Text>
-        </View>
+        </Animated.View>
       </View>
     </SafeAreaView>
   );
@@ -92,6 +169,12 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.panel,
     padding: 28,
     gap: 14,
+    justifyContent: "space-between",
+    shadowColor: "#0F172A",
+    shadowOffset: { width: 0, height: 12 },
+    shadowOpacity: 0.07,
+    shadowRadius: 26,
+    elevation: 8,
   },
   cardMobile: {
     padding: 18,
