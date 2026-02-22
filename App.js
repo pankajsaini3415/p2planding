@@ -24,9 +24,6 @@ const stats = [
 ];
 
 const services = [
-  { title: "Buy USDT", rate: "₹105.00", icon: "trending-up" },
-  { title: "Sell USDT", rate: "₹105.00", icon: "repeat" },
-  { title: "Bulk Orders", rate: "Best Custom Rate", icon: "layers" },
 ];
 
 const trustPoints = [
@@ -107,10 +104,7 @@ export default function App() {
           </View>
 
           <Text style={[styles.title, isCompact && styles.titleCompact]}>Fast USDT Trades in a Clean, Secure Experience</Text>
-          <Text style={[styles.subtitle, isCompact && styles.subtitleCompact]}>
-            White-theme premium landing screen focused on trust, speed, and frictionless conversion.
-          </Text>
-
+          
           <View style={styles.statsRow}>
             {stats.map((item) => (
               <StatCard key={item.label} {...item} />
