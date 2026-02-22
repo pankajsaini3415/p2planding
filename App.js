@@ -127,7 +127,7 @@ export default function App() {
 
           <View style={[styles.footerRow, isMobile && styles.footerRowMobile]}>
             <Text style={styles.footerText}>© {year} USDT.P2P • All rights reserved</Text>
-            <TelegramButton label="Chat on Telegram" onPress={() => openTelegram("Hi @Prongtoken, I want to start trading USDT at ₹105")}/>
+            <TelegramButton label="Contact Now" onPress={() => openTelegram("Hi @Prongtoken, I want to start trading USDT at ₹105")}/>
           </View>
         </View>
       </View>
