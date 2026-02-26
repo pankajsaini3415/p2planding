@@ -3,462 +3,468 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>USDT.P2P · instant & secure</title>
-  <!-- Font Awesome 6 (free) for crisp icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <title>USDT.P2P — Instant Crypto Exchange</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
-    /* ----- CSS reset & global ----- */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
 
-    /* Design system — soft light palette with premium feel */
     :root {
-      --bg-start: #f9fcff;        /* very light gradient start */
-      --bg-end: #f0f5fd;          /* subtle blueish end */
-      --card-bg: rgba(255,255,255,0.9);
-      --card-border: rgba(226, 232, 240, 0.5);
-      --text-primary: #0b1e38;    /* deep navy for headings */
-      --text-secondary: #2d4059;   /* soft navy for secondary */
-      --text-muted: #62748c;       /* elegant muted */
-      --primary: #2266cc;          /* rich but soft blue */
-      --primary-light: #d9e6ff;
-      --success: #10b981;          /* fresh green */
-      --success-light: #d1fae5;
-      --chip-bg: #ffffff;
-      --chip-border: #e4eaf2;
-      --shadow-sm: 0 10px 30px -8px rgba(0,20,40,0.1), 0 2px 8px -4px rgba(0,20,40,0.02);
-      --shadow-md: 0 20px 40px -12px rgba(0,34,64,0.18), 0 8px 24px -8px rgba(0,34,64,0.1);
-      --shadow-glow: 0 0 0 1px rgba(34,102,204,0.1), 0 20px 40px -12px rgba(0,34,64,0.18);
-      --radius-card: 36px;
-      --radius-pill: 60px;
+      --navy:    #071A2F;
+      --navy2:   #0E2A47;
+      --navy3:   #1A3D5C;
+      --gold:    #C8953A;
+      --gold-lt: #F0C878;
+      --teal:    #0A9D8A;
+      --teal-lt: #D0F5F0;
+      --cream:   #FDFAF5;
+      --white:   #FFFFFF;
+      --muted:   #7A8EA3;
+      --border:  rgba(10,30,60,0.08);
+      --card-bg: rgba(255,255,255,0.88);
     }
 
-    body {
-      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, sans-serif;
-      background: linear-gradient(145deg, var(--bg-start) 0%, var(--bg-end) 100%);
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 16px;
-      margin: 0;
-      /* soft noise texture (subtle) */
-      background-image: radial-gradient(circle at 30% 40%, rgba(255,255,255,0.4) 0%, transparent 30%),
-                        radial-gradient(circle at 70% 60%, rgba(210,230,255,0.5) 0%, transparent 40%);
+    html, body {
+      height: 100%; width: 100%;
+      overflow: hidden;
+      font-family: 'DM Sans', system-ui, sans-serif;
+      background: var(--cream);
     }
 
-    /* main container – exactly fits view, no scroll */
-    .container {
-      width: 100%;
-      max-width: 1040px;
-      margin: auto;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+    /* ─── animated background ─── */
+    .bg-canvas {
+      position: fixed; inset: 0; z-index: 0;
+      background: linear-gradient(145deg, #EEF4FF 0%, #F8F3EC 40%, #EAF6F4 100%);
+      overflow: hidden;
     }
 
-    /* ----- card design with glass-like clarity ----- */
+    .orb {
+      position: absolute; border-radius: 50%;
+      filter: blur(80px); opacity: 0.55;
+      animation: orbDrift linear infinite;
+    }
+    .orb1 { width: 520px; height: 520px; background: radial-gradient(circle, #C8E6FF 0%, transparent 70%); top:-15%; left:-10%; animation-duration: 22s; }
+    .orb2 { width: 460px; height: 460px; background: radial-gradient(circle, #D4F0E8 0%, transparent 70%); bottom:-20%; right:-8%; animation-duration: 18s; animation-delay: -6s; }
+    .orb3 { width: 300px; height: 300px; background: radial-gradient(circle, #FDE8C0 0%, transparent 70%); top:40%; left:55%; animation-duration: 26s; animation-delay: -12s; }
+
+    @keyframes orbDrift {
+      0%   { transform: translate(0,0) scale(1); }
+      33%  { transform: translate(30px,-20px) scale(1.05); }
+      66%  { transform: translate(-20px,25px) scale(0.97); }
+      100% { transform: translate(0,0) scale(1); }
+    }
+
+    /* fine grain overlay */
+    .bg-canvas::after {
+      content:''; position:absolute; inset:0; pointer-events:none;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      opacity: 0.35;
+    }
+
+    /* ─── layout ─── */
+    .stage {
+      position: fixed; inset: 0; z-index: 1;
+      display: flex; align-items: center; justify-content: center;
+      padding: 20px;
+    }
+
+    /* ─── card ─── */
     .card {
       background: var(--card-bg);
-      backdrop-filter: blur(2px);
-      border: 1px solid var(--card-border);
-      border-radius: var(--radius-card);
-      padding: 2.5rem;
-      box-shadow: var(--shadow-md);
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      gap: 1.2rem;
-      transition: box-shadow 0.3s ease;
-      animation: cardFloatIn 0.8s cubic-bezier(0.15, 0.85, 0.35, 1.05) forwards;
-      transform-origin: center;
-      max-width: 880px;         /* keeps it cozy on large screens */
-      margin: 0 auto;
-    }
-
-    .card:hover {
-      box-shadow: var(--shadow-glow);
-    }
-
-    @keyframes cardFloatIn {
-      0% { opacity: 0; transform: translateY(18px) scale(0.98); }
-      100% { opacity: 1; transform: translateY(0) scale(1); }
-    }
-
-    /* every direct child gets a subtle staggered fade */
-    .card > * {
-      animation: fadeUp 0.5s ease forwards;
-      opacity: 0;
-      animation-delay: calc(0.08s * var(--i, 1));
-    }
-
-    /* assign indexes manually via style or rely on nth-child */
-    .card > :nth-child(1) { --i: 1; }
-    .card > :nth-child(2) { --i: 2; }
-    .card > :nth-child(3) { --i: 3; }
-    .card > :nth-child(4) { --i: 4; }
-    .card > :nth-child(5) { --i: 5; }
-    .card > :nth-child(6) { --i: 6; }
-
-    @keyframes fadeUp {
-      0% { opacity: 0; transform: translateY(10px); }
-      100% { opacity: 1; transform: translateY(0); }
-    }
-
-    /* top row: brand + pill */
-    .top-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-      flex-wrap: wrap;
-    }
-
-    .brand {
-      font-size: 1.9rem;
-      font-weight: 800;
-      letter-spacing: -0.02em;
-      background: linear-gradient(135deg, #142b44, #1d3b5c);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+      backdrop-filter: blur(28px) saturate(180%);
+      -webkit-backdrop-filter: blur(28px) saturate(180%);
+      border: 1px solid rgba(255,255,255,0.7);
+      border-radius: 40px;
+      padding: 48px 52px;
+      width: 100%; max-width: 860px;
+      box-shadow:
+        0 0 0 1px rgba(10,30,60,0.04),
+        0 32px 64px -16px rgba(7,26,47,0.18),
+        0 8px 20px -6px rgba(7,26,47,0.08),
+        inset 0 1px 0 rgba(255,255,255,0.9);
+      display: grid;
+      grid-template-rows: auto auto auto auto auto auto;
+      gap: 0;
       position: relative;
+      overflow: hidden;
+      opacity: 0;
+      animation: cardIn 0.9s cubic-bezier(0.16,1,0.3,1) 0.1s forwards;
     }
 
-    .brand::after {
-      content: '';
-      position: absolute;
-      bottom: -4px;
-      left: 0;
-      width: 40px;
-      height: 3px;
-      background: var(--primary);
-      border-radius: 4px;
-      opacity: 0.3;
+    .card::before {
+      content:'';
+      position:absolute; inset:0; border-radius:40px;
+      background: linear-gradient(145deg, rgba(255,255,255,0.5) 0%, transparent 60%);
+      pointer-events:none;
     }
 
-    /* rate pill — elegant pulse + shine */
-    .rate-pill {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      background: white;
-      border: 1px solid rgba(16,185,129,0.2);
-      border-radius: var(--radius-pill);
-      padding: 10px 18px;
-      box-shadow: 0 4px 12px rgba(16,185,129,0.08);
-      animation: softPulse 3s infinite ease-in-out;
+    /* corner accent */
+    .card::after {
+      content:'';
+      position:absolute; top:0; right:0;
+      width:200px; height:200px; border-radius:0 40px 0 200px;
+      background: linear-gradient(135deg, rgba(200,149,58,0.07) 0%, transparent 60%);
+      pointer-events:none;
     }
 
-    @keyframes softPulse {
-      0% { box-shadow: 0 4px 12px rgba(16,185,129,0.08); transform: scale(1); }
-      50% { box-shadow: 0 8px 20px rgba(16,185,129,0.18); transform: scale(1.02); }
-      100% { box-shadow: 0 4px 12px rgba(16,185,129,0.08); transform: scale(1); }
+    @keyframes cardIn {
+      from { opacity:0; transform: translateY(28px) scale(0.97); }
+      to   { opacity:1; transform: translateY(0) scale(1); }
     }
 
-    .rate-pill i {
-      color: var(--success);
-      font-size: 1.1rem;
-      filter: drop-shadow(0 2px 4px rgba(16,185,129,0.3));
+    /* ─── top row ─── */
+    .top-row {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 36px;
+      animation: rowIn 0.7s cubic-bezier(0.16,1,0.3,1) 0.3s both;
     }
 
-    .rate-text {
-      font-weight: 700;
-      font-size: 1rem;
-      color: #0b2e26;
-      letter-spacing: -0.01em;
+    @keyframes rowIn {
+      from { opacity:0; transform:translateY(-10px); }
+      to   { opacity:1; transform:translateY(0); }
     }
 
-    /* main heading */
+    /* brand mark */
+    .brand-wrap { display:flex; align-items:center; gap:12px; }
+    .brand-icon {
+      width:42px; height:42px; border-radius:14px;
+      background: linear-gradient(135deg, var(--navy) 0%, var(--navy3) 100%);
+      display:flex; align-items:center; justify-content:center;
+      box-shadow: 0 6px 16px rgba(7,26,47,0.25);
+      position:relative; overflow:hidden;
+    }
+    .brand-icon::after {
+      content:''; position:absolute; inset:0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 50%);
+    }
+    .brand-icon i { color:#fff; font-size:1.1rem; position:relative; z-index:1; }
+
+    .brand-text {
+      font-family:'Playfair Display', serif;
+      font-weight:800; font-size:1.5rem;
+      color: var(--navy);
+      letter-spacing:-0.01em;
+    }
+    .brand-text span { color:var(--gold); }
+
+    /* live rate badge */
+    .rate-badge {
+      display:flex; align-items:center; gap:10px;
+      background: linear-gradient(135deg, #F0FDF9 0%, #E6FAF5 100%);
+      border: 1px solid rgba(10,157,138,0.2);
+      border-radius:60px; padding:10px 18px;
+      position:relative; overflow:hidden;
+      box-shadow: 0 4px 14px rgba(10,157,138,0.1);
+      animation: pulseBadge 3s ease-in-out infinite;
+    }
+    .rate-badge::before {
+      content:''; position:absolute; inset:0;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
+      transform:translateX(-100%);
+      animation: shimmerBadge 3.5s ease-in-out infinite;
+    }
+    @keyframes shimmerBadge {
+      0%,60% { transform:translateX(-100%); }
+      100% { transform:translateX(200%); }
+    }
+    @keyframes pulseBadge {
+      0%,100% { box-shadow:0 4px 14px rgba(10,157,138,0.1); }
+      50%      { box-shadow:0 6px 20px rgba(10,157,138,0.22); }
+    }
+
+    .rate-dot { width:8px; height:8px; border-radius:50%; background:var(--teal); position:relative; }
+    .rate-dot::after {
+      content:''; position:absolute; inset:-3px; border-radius:50%;
+      background:rgba(10,157,138,0.25);
+      animation: dotPulse 1.8s ease-in-out infinite;
+    }
+    @keyframes dotPulse {
+      0%,100% { transform:scale(1); opacity:1; }
+      50% { transform:scale(1.6); opacity:0; }
+    }
+    .rate-label { font-size:0.72rem; font-weight:700; color:var(--teal); letter-spacing:0.08em; text-transform:uppercase; }
+    .rate-val { font-weight:800; font-size:1rem; color:#064E3B; letter-spacing:-0.01em; }
+
+    /* ─── headline ─── */
+    .headline-block { margin-bottom:20px; animation: rowIn 0.7s cubic-bezier(0.16,1,0.3,1) 0.42s both; }
+
+    .eyebrow {
+      display:inline-flex; align-items:center; gap:6px;
+      font-size:0.75rem; font-weight:700; letter-spacing:0.12em;
+      text-transform:uppercase; color:var(--gold);
+      margin-bottom:14px;
+    }
+    .eyebrow-line { width:28px; height:2px; background:var(--gold); border-radius:2px; }
+
     .title {
-      font-size: 3.4rem;
-      font-weight: 800;
-      line-height: 1.15;
-      letter-spacing: -0.02em;
-      color: var(--text-primary);
-      margin-top: 0.2rem;
-      max-width: 700px;
+      font-family:'Playfair Display', serif;
+      font-size: clamp(2.4rem, 5vw, 3.8rem);
+      font-weight:800; line-height:1.1;
+      letter-spacing:-0.02em;
+      color: var(--navy);
+    }
+    .title em {
+      font-style:italic;
+      background: linear-gradient(110deg, var(--gold) 0%, var(--gold-lt) 50%, var(--gold) 100%);
+      background-size:200%;
+      -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+      background-clip:text;
+      animation: goldShimmer 4s linear infinite;
+    }
+    @keyframes goldShimmer {
+      0% { background-position:0% 50%; }
+      100% { background-position:200% 50%; }
     }
 
     .subtitle {
-      font-size: 1.2rem;
-      font-weight: 500;
-      color: var(--text-secondary);
-      margin-top: -0.2rem;
-      border-left: 4px solid var(--primary-light);
-      padding-left: 1rem;
+      margin-top:12px;
+      font-size:1.05rem; font-weight:500; color:var(--muted);
+      display:flex; align-items:center; gap:8px;
+    }
+    .subtitle::before {
+      content:''; display:block; flex-shrink:0;
+      width:3px; height:18px; border-radius:3px;
+      background: linear-gradient(180deg, var(--teal), var(--gold));
     }
 
-    /* payment method chips — interactive, modern */
-    .method-wrap {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      margin: 0.5rem 0 0.8rem;
+    /* ─── divider ─── */
+    .divider {
+      height:1px; background:linear-gradient(90deg, transparent, var(--border), transparent);
+      margin:6px 0 22px;
+      animation: rowIn 0.7s cubic-bezier(0.16,1,0.3,1) 0.5s both;
     }
 
-    .method-chip {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: var(--chip-bg);
-      border: 1px solid var(--chip-border);
-      border-radius: 60px;
-      padding: 10px 20px;
-      font-weight: 600;
-      font-size: 0.95rem;
-      color: var(--text-secondary);
-      box-shadow: var(--shadow-sm);
-      transition: all 0.2s cubic-bezier(0.2, 0, 0, 1);
-      cursor: default;
-      backdrop-filter: blur(2px);
+    /* ─── payment methods ─── */
+    .methods-label {
+      font-size:0.7rem; font-weight:700; letter-spacing:0.1em;
+      text-transform:uppercase; color:var(--muted);
+      margin-bottom:12px;
+      animation: rowIn 0.7s cubic-bezier(0.16,1,0.3,1) 0.54s both;
+    }
+    .methods-wrap {
+      display:flex; flex-wrap:wrap; gap:10px;
+      margin-bottom:30px;
+      animation: rowIn 0.7s cubic-bezier(0.16,1,0.3,1) 0.58s both;
+    }
+    .chip {
+      display:inline-flex; align-items:center; gap:7px;
+      background:white;
+      border:1px solid var(--border);
+      border-radius:60px; padding:9px 18px;
+      font-size:0.88rem; font-weight:600; color:var(--navy2);
+      box-shadow:0 2px 8px rgba(7,26,47,0.05);
+      transition:all 0.22s cubic-bezier(0.2,0,0,1);
+      cursor:default;
+      position:relative; overflow:hidden;
+    }
+    .chip::before {
+      content:''; position:absolute; inset:0;
+      background:linear-gradient(135deg, rgba(10,157,138,0.08) 0%, transparent 100%);
+      opacity:0; transition:opacity 0.2s;
+    }
+    .chip:hover { border-color:rgba(10,157,138,0.35); transform:translateY(-3px) scale(1.03); box-shadow:0 10px 22px rgba(10,157,138,0.16); }
+    .chip:hover::before { opacity:1; }
+    .chip i { color:var(--teal); font-size:0.9rem; }
+
+    /* ─── CTA + trust row ─── */
+    .bottom-row {
+      display:flex; align-items:center; gap:20px; flex-wrap:wrap;
+      animation: rowIn 0.7s cubic-bezier(0.16,1,0.3,1) 0.64s both;
     }
 
-    .method-chip i {
-      color: var(--primary);
-      font-size: 1rem;
-      transition: transform 0.15s ease;
+    .tg-btn {
+      display:inline-flex; align-items:center; gap:12px;
+      background: linear-gradient(125deg, var(--navy) 0%, var(--navy3) 100%);
+      border:none; border-radius:80px;
+      padding:16px 34px;
+      color:#fff; font-family:'DM Sans', sans-serif;
+      font-size:1.05rem; font-weight:700;
+      text-decoration:none; letter-spacing:0.01em;
+      box-shadow: 0 18px 36px rgba(7,26,47,0.28), 0 4px 10px rgba(7,26,47,0.12);
+      transition:all 0.25s cubic-bezier(0.2,0,0,1);
+      position:relative; overflow:hidden;
+    }
+    .tg-btn::before {
+      content:''; position:absolute; inset:0;
+      background:linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.12) 50%, transparent 100%);
+      transform:translateX(-100%);
+      animation: btnShimmer 3s ease-in-out infinite;
+    }
+    @keyframes btnShimmer {
+      0%,50% { transform:translateX(-100%); }
+      70% { transform:translateX(100%); }
+      100% { transform:translateX(100%); }
+    }
+    .tg-btn:hover { transform:translateY(-3px) scale(1.02); box-shadow:0 26px 44px rgba(7,26,47,0.34); background: linear-gradient(125deg, #0c2540 0%, var(--navy2) 100%); }
+    .tg-btn:active { transform:scale(0.97); box-shadow:0 8px 18px rgba(7,26,47,0.22); }
+    .tg-btn i { font-size:1.4rem; }
+
+    /* trust stack */
+    .trust-stack { display:flex; flex-direction:column; gap:6px; }
+    .trust-item {
+      display:flex; align-items:center; gap:8px;
+      font-size:0.82rem; font-weight:500; color:var(--muted);
+    }
+    .trust-item i { color:var(--teal); font-size:0.75rem; }
+
+    /* ─── footer ─── */
+    .footer {
+      margin-top:22px; padding-top:16px;
+      border-top:1px solid var(--border);
+      display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px;
+      animation: rowIn 0.7s cubic-bezier(0.16,1,0.3,1) 0.72s both;
+    }
+    .footer-left { display:flex; align-items:center; gap:8px; font-size:0.8rem; color:var(--muted); font-weight:500; }
+    .shield-icon { color:var(--teal); font-size:0.85rem; }
+    .footer-right { display:flex; align-items:center; gap:6px; }
+    .f-tag {
+      font-size:0.7rem; font-weight:700; letter-spacing:0.05em;
+      text-transform:uppercase; color:var(--muted);
+      background:rgba(7,26,47,0.05); border-radius:20px;
+      padding:4px 10px;
     }
 
-    .method-chip:hover {
-      background: white;
-      border-color: var(--primary);
-      transform: translateY(-3px);
-      box-shadow: 0 16px 24px -12px rgba(34,102,204,0.28);
+    /* ─── responsive ─── */
+    @media(max-width:680px){
+      .card { padding:30px 28px; border-radius:28px; }
+      .title { font-size:2.3rem; }
+      .top-row { flex-direction:column; align-items:flex-start; gap:14px; }
+      .tg-btn { width:100%; justify-content:center; }
+      .trust-stack { display:none; }
+    }
+    @media(max-width:420px){
+      .card { padding:24px 20px; }
+      .title { font-size:2rem; }
+      .chip { padding:7px 14px; font-size:0.82rem; }
     }
 
-    .method-chip:hover i {
-      transform: scale(1.2);
-      color: var(--primary);
+    /* card entrance glow ring */
+    .glow-ring {
+      position:absolute; inset:-2px; border-radius:42px;
+      background: linear-gradient(135deg, rgba(200,149,58,0.15) 0%, rgba(10,157,138,0.1) 50%, rgba(200,149,58,0.08) 100%);
+      z-index:-1; filter:blur(12px);
+      animation:ringPulse 5s ease-in-out infinite;
     }
-
-    /* telegram button — premium feel with lift & glow */
-    .telegram-btn {
-      align-self: flex-start;
-      background: linear-gradient(115deg, #2563eb, #1d4ed8);
-      border: none;
-      border-radius: 80px;
-      padding: 16px 32px;
-      display: inline-flex;
-      align-items: center;
-      gap: 12px;
-      color: white;
-      font-size: 1.2rem;
-      font-weight: 700;
-      text-decoration: none;
-      box-shadow: 0 20px 30px -12px #1e3a8a80, 0 4px 12px rgba(0,0,0,0.05);
-      transition: all 0.25s ease;
-      animation: floatGentle 3.5s infinite alternate;
-      border: 1px solid rgba(255,255,255,0.2);
-      backdrop-filter: blur(4px);
-      letter-spacing: 0.3px;
-    }
-
-    @keyframes floatGentle {
-      0% { transform: translateY(0); box-shadow: 0 20px 30px -12px #1e3a8a80; }
-      100% { transform: translateY(-4px); box-shadow: 0 28px 40px -12px #1e3f8ac0; }
-    }
-
-    .telegram-btn i {
-      font-size: 1.6rem;
-      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
-    }
-
-    .telegram-btn:hover {
-      background: linear-gradient(115deg, #1d4ed8, #1e3a8a);
-      transform: scale(1.02) translateY(-2px);
-      box-shadow: 0 30px 40px -16px #0f2b62;
-    }
-
-    .telegram-btn:active {
-      transform: scale(0.98) translateY(2px);
-      box-shadow: 0 10px 18px -10px #0f2b62;
-      transition: 0.05s;
-    }
-
-    /* footer — extra refined */
-    .footer-note {
-      margin-top: 0.5rem;
-      color: var(--text-muted);
-      font-size: 0.9rem;
-      font-weight: 500;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      border-top: 1px dashed rgba(100,116,139,0.2);
-      padding-top: 1rem;
-    }
-
-    .footer-note i {
-      color: var(--primary);
-      opacity: 0.8;
-      font-size: 0.8rem;
-    }
-
-    /* responsive adjustments — no scrolling ever */
-    @media (max-width: 700px) {
-      .card {
-        padding: 1.8rem;
-        border-radius: 28px;
-      }
-      .title {
-        font-size: 2.5rem;
-      }
-      .subtitle {
-        font-size: 1rem;
-      }
-      .telegram-btn {
-        padding: 14px 28px;
-        font-size: 1rem;
-      }
-      .brand {
-        font-size: 1.6rem;
-      }
-    }
-
-    @media (max-width: 480px) {
-      .top-row {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-      .method-chip {
-        padding: 8px 16px;
-      }
-      .telegram-btn {
-        width: 100%;
-        justify-content: center;
-      }
-    }
-
-    /* small decorative elements — extra depth (no extra content) */
-    .card::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      border-radius: var(--radius-card);
-      padding: 2px;
-      background: linear-gradient(145deg, rgba(255,255,255,0.5), rgba(226,232,240,0.2));
-      mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-      -webkit-mask-composite: xor;
-      mask-composite: exclude;
-      pointer-events: none;
-    }
-
-    /* optional subtle floating bg */
-    .container {
-      position: relative;
-    }
-
-    .container::after {
-      content: '';
-      position: absolute;
-      width: 400px;
-      height: 400px;
-      background: radial-gradient(circle at 30% 40%, rgba(34,102,204,0.03), transparent 60%);
-      border-radius: 50%;
-      z-index: -1;
-      bottom: -10%;
-      right: -5%;
-    }
-
-    .container::before {
-      content: '';
-      position: absolute;
-      width: 350px;
-      height: 350px;
-      background: radial-gradient(circle at 70% 80%, rgba(16,185,129,0.03), transparent 70%);
-      border-radius: 50%;
-      z-index: -1;
-      top: -10%;
-      left: -5%;
+    @keyframes ringPulse {
+      0%,100% { opacity:0.5; }
+      50% { opacity:1; }
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <!-- main card with micro-interactions -->
-    <div class="card" id="mainCard">
-      <!-- top row -->
-      <div class="top-row">
-        <span class="brand">USDT.P2P</span>
-        <div class="rate-pill">
-          <i class="fas fa-chart-line"></i>
-          <span class="rate-text">USDT ₹105.00</span>
-        </div>
+
+<!-- animated background -->
+<div class="bg-canvas">
+  <div class="orb orb1"></div>
+  <div class="orb orb2"></div>
+  <div class="orb orb3"></div>
+</div>
+
+<div class="stage">
+  <div class="card" id="mainCard">
+    <div class="glow-ring"></div>
+
+    <!-- TOP ROW -->
+    <div class="top-row">
+      <div class="brand-wrap">
+        <div class="brand-icon"><i class="fas fa-bolt"></i></div>
+        <div class="brand-text">USDT<span>.</span>P2P</div>
       </div>
 
-      <!-- headlines -->
-      <h1 class="title">Trade USDT <br>Fast & Secure</h1>
-      <p class="subtitle">All payment methods available.</p>
-
-      <!-- payment chips (exactly 5) -->
-      <div class="method-wrap">
-        <div class="method-chip"><i class="fas fa-check-circle"></i><span>UPI</span></div>
-        <div class="method-chip"><i class="fas fa-check-circle"></i><span>Net Banking</span></div>
-        <div class="method-chip"><i class="fas fa-check-circle"></i><span>IMPS</span></div>
-        <div class="method-chip"><i class="fas fa-check-circle"></i><span>RTGS</span></div>
-        <div class="method-chip"><i class="fas fa-check-circle"></i><span>CDM</span></div>
+      <div class="rate-badge">
+        <div class="rate-dot"></div>
+        <span class="rate-label">Live Rate</span>
+        <span class="rate-val">₹<span id="rateNum">105.00</span></span>
       </div>
+    </div>
 
-      <!-- telegram CTA (opens chat) -->
-      <a href="#" class="telegram-btn" id="telegramLink" target="_blank" rel="noopener noreferrer">
+    <!-- HEADLINE -->
+    <div class="headline-block">
+      <div class="eyebrow"><div class="eyebrow-line"></div>India's Trusted P2P Desk</div>
+      <h1 class="title">Trade USDT<br><em>Fast & Secure</em></h1>
+      <p class="subtitle">All payment methods accepted. Instant settlement.</p>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- PAYMENT METHODS -->
+    <div class="methods-label">Accepted Payment Methods</div>
+    <div class="methods-wrap">
+      <div class="chip"><i class="fas fa-check-circle"></i><span>UPI</span></div>
+      <div class="chip"><i class="fas fa-check-circle"></i><span>Net Banking</span></div>
+      <div class="chip"><i class="fas fa-check-circle"></i><span>IMPS</span></div>
+      <div class="chip"><i class="fas fa-check-circle"></i><span>RTGS</span></div>
+      <div class="chip"><i class="fas fa-check-circle"></i><span>CDM</span></div>
+    </div>
+
+    <!-- CTA -->
+    <div class="bottom-row">
+      <a class="tg-btn" id="telegramLink" href="#" target="_blank" rel="noopener noreferrer">
         <i class="fab fa-telegram-plane"></i>
         <span>Chat on Telegram</span>
       </a>
-
-      <!-- footer note -->
-      <div class="footer-note">
-        <i class="fas fa-shield-alt"></i>
-        <span>Instant support • Verified deals • White theme premium UX</span>
+      <div class="trust-stack">
+        <div class="trust-item"><i class="fas fa-shield-alt"></i><span>Verified & Trusted Dealer</span></div>
+        <div class="trust-item"><i class="fas fa-clock"></i><span>Instant Response • 24/7</span></div>
+        <div class="trust-item"><i class="fas fa-lock"></i><span>Escrow-Secured Trades</span></div>
       </div>
     </div>
+
+    <!-- FOOTER -->
+    <div class="footer">
+      <div class="footer-left">
+        <i class="fas fa-shield-halved shield-icon"></i>
+        <span>Encrypted &amp; Private — No KYC Required</span>
+      </div>
+      <div class="footer-right">
+        <span class="f-tag">USDT · TRC20 · ERC20</span>
+      </div>
+    </div>
+
   </div>
+</div>
 
-  <!-- minimal script: set telegram href and ensure no scroll -->
-  <script>
-    (function() {
-      const USERNAME = "Prongtoken";
-      const RATE = "105.00";
-      const message = `Hi @${USERNAME}, I want to buy/sell USDT at ₹${RATE}`;
-      const encoded = encodeURIComponent(message);
-      const telegramUrl = `https://t.me/${USERNAME}?text=${encoded}`;
+<script>
+(function(){
+  const USERNAME = "Prongtoken";
+  const RATE     = "105.00";
 
-      const link = document.getElementById('telegramLink');
-      if (link) {
-        link.href = telegramUrl;
-      }
+  // set telegram link
+  const msg = `Hi @${USERNAME}, I want to buy/sell USDT at ₹${RATE}`;
+  document.getElementById('telegramLink').href =
+    `https://t.me/${USERNAME}?text=${encodeURIComponent(msg)}`;
 
-      // guarantee that body never overflows (already fine, but double-check)
-      document.body.style.overflow = 'hidden';
-      window.addEventListener('resize', () => {
-        // keep no scroll: height always fits, but ensure body doesn't scroll
-        document.body.style.overflow = 'hidden';
-      });
+  // subtle rate counter entrance
+  const el = document.getElementById('rateNum');
+  if(el){
+    let start = 100.00, end = 105.00, dur = 1200, begin = null;
+    function step(ts){
+      if(!begin) begin = ts;
+      let t = Math.min((ts - begin)/dur, 1);
+      let ease = 1 - Math.pow(1-t,3);
+      el.textContent = (start + (end-start)*ease).toFixed(2);
+      if(t < 1) requestAnimationFrame(step);
+    }
+    setTimeout(()=> requestAnimationFrame(step), 600);
+  }
 
-      // optional: set min-height of card based on viewport? 
-      // already content fits perfectly without scroll because we use flex.
-      // but ensure card doesn't exceed viewport height (rare)
-      function adjustCardHeight() {
-        const vh = window.innerHeight;
-        const card = document.querySelector('.card');
-        if (!card) return;
-        // if card content is taller than viewport - padding, we could reduce padding, but not needed.
-        // fallback: if card height > vh-20, we shrink a bit, but unlikely with this content.
-        if (card.offsetHeight > vh - 20) {
-          card.style.padding = '1.5rem';  // shrink padding slightly
-        } else {
-          card.style.padding = ''; // revert to default (2.5rem)
-        }
-      }
-      window.addEventListener('load', adjustCardHeight);
-      window.addEventListener('resize', adjustCardHeight);
-    })();
-  </script>
+  // prevent scroll
+  document.body.style.overflow = 'hidden';
+  window.addEventListener('resize', ()=>{ document.body.style.overflow='hidden'; });
 
-  <!-- No extra content – clean, minimal, ultra-premium -->
+  // adjust padding on tiny screens
+  function fit(){
+    const card = document.getElementById('mainCard');
+    if(!card) return;
+    const vh = window.innerHeight;
+    if(card.offsetHeight > vh - 30){
+      card.style.paddingTop = card.style.paddingBottom = '24px';
+    }
+  }
+  window.addEventListener('load', fit);
+  window.addEventListener('resize', fit);
+})();
+</script>
 </body>
 </html>
